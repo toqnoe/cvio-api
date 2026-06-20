@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import AuthService from "../../services/v1/auth.service.js";
+import ApiResponse from "../../utils/ApiResponse.js";
 import logger from "../../utils/logger.js";
 import env from "../../../config/env.js";
 
@@ -35,7 +36,7 @@ class AuthController {
       `User ${data.id} registered at ${req.ip} using ${req.get("User-Agent")}`,
     );
 
-    res.status(201).json({ success: true, message });
+    ApiResponse.success(res, 201, message);
   });
 
   // LOGIN
@@ -53,9 +54,10 @@ class AuthController {
       `User ${data.id} logged in at ${req.ip} using ${req.get("User-Agent")}`,
     );
 
-    res
-      .status(200)
-      .json({ success: true, message, token: tokens.accessToken, data });
+    ApiResponse.success(res, 200, message, {
+      accessToken: tokens.accessToken,
+      user: data,
+    });
   });
 
   // REFRESH
@@ -67,7 +69,7 @@ class AuthController {
 
     setRefreshCookie(res, tokens.refreshToken);
 
-    res.status(200).json({ success: true, message, token: tokens.accessToken });
+    ApiResponse.success(req, 200, message, { accessToken: tokens.accessToken });
   });
 
   // LOGOUT
@@ -85,7 +87,7 @@ class AuthController {
         : "Logout request completed",
     );
 
-    res.status(200).json({ success: true, message });
+    ApiResponse.success(res, 200, message);
   });
 
   // LOGOUT-ALL
@@ -103,7 +105,7 @@ class AuthController {
         : "Logout from all devices request completed",
     );
 
-    res.status(200).json({ success: true, message });
+    ApiResponse.success(res, 200, message);
   });
 }
 

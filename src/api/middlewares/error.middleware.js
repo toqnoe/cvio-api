@@ -1,6 +1,7 @@
 import logger from "../utils/logger.js";
 import env from "../../config/env.js";
 import ApiError from "../utils/errors/ApiError.js";
+import ApiResponse from "../utils/ApiResponse.js";
 
 const errorHandler = (err, req, res, next) => {
   if (res.headersSent) return next();
@@ -21,10 +22,7 @@ const errorHandler = (err, req, res, next) => {
     stack: apiError.stack,
   });
 
-  res.status(apiError.statusCode).json({
-    success: false,
-    code: apiError.code,
-    message: apiError.message,
+  ApiResponse.error(res, apiError.statusCode, apiError.message, apiError.code, {
     ...(apiError.details !== null && { details: apiError.details }),
     ...(env.NODE_ENV === "development" && { stack: apiError.stack }),
   });
