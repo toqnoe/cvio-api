@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema(
       required: [true, "Name is required"],
       trim: true,
     },
+
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -29,6 +30,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       unique: true,
     },
+
     password: {
       type: String,
       required: [true, "Password is required"],
@@ -40,6 +42,7 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
     deleted: {
       type: Boolean,
       default: false,
